@@ -1,0 +1,16 @@
+# OS-generated files
+Thumbs.db
+.DS_Store
+*.tmp
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Release files (attach to GitHub releases instead)
+*.zip
+Update*.md
+
