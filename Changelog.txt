@@ -3,8 +3,8 @@
 --------------------------------------------------------------------------------
 | * Update Checker: Added automatic update checker button with notification 
 |   badge when new version is available! When an update is available,
-|   the app fetches the server link defined in the code. If the update is confirmed,
-|   the user is redirected to the MediaFire download page.
+|   the app fetches the GitHub page defined in the code. If the update is confirmed,
+|   the user is redirected to the GitHub release page.
 
 — June 03, 2026
 --------------------------------------------------------------------------------
