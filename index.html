@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Vehicle Colors Tool</title>
+    <link rel="stylesheet" href="resources/css/all.min.css" />
+    <link rel="stylesheet" href="resources/css/vct-styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Vehicle Colors Tool</h1>
+        <p>
+          Customize vehicle colors for Split/Second's VehicleColors.params file
+        </p>
+        <div class="floating-cards">
+          <button
+            class="floating-card theme-toggle"
+            title="Toggle theme"
+            aria-label="Toggle theme"
+          >
+            <i class="fas fa-sun"></i>
+          </button>
+          <button
+            class="floating-card"
+            id="guideBtn"
+            title="Usage Guide"
+            aria-label="Open usage guide"
+          >
+            <i class="fas fa-book"></i>
+          </button>
+          <button
+            class="floating-card"
+            id="vehiclesBtn"
+            title="Vehicle List"
+            aria-label="Open vehicle list"
+          >
+            <i class="fas fa-car"></i>
+          </button>
+          <button
+            class="floating-card"
+            id="libraryBtn"
+            title="Color Library"
+            aria-label="Open color library"
+          >
+            <i class="fas fa-palette"></i>
+          </button>
+          <button
+            class="floating-card update-btn"
+            id="checkUpdateBtn"
+            title="Check for Updates"
+          >
+            <i class="fas fa-download"></i>
+            <span class="update-badge" id="updateBadge">!</span>
+          </button>
+        </div>
+      </header>
+      <main class="main-content">
+        <section class="input-section">
+          <div class="file-input-wrapper">
+            <input type="file" id="file-upload" accept=".params" />
+            <div class="file-input-content">
+              <i class="fas fa-upload"></i> <span>Upload File</span>
+              <span class="drag-text">or drag and drop here</span>
+            </div>
+          </div>
+          <div class="select-wrapper">
+            <select id="car-select" class="custom-scrollbar">
+              <option value="">Select a car</option>
+            </select>
+            <div class="size-sync-wrapper">
+              <select id="size-select" disabled="disabled">
+                <option value="">Palette size</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </select>
+              <button
+                id="sync-btn"
+                class="sync-btn"
+                disabled="disabled"
+                title="Toggle sync with paired vehicle"
+                aria-label="Toggle sync with paired vehicle"
+              >
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <button
+                id="max-size-btn"
+                class="max-size-btn"
+                disabled="disabled"
+                title="Set max palette size (9) for all vehicles"
+                aria-label="Set max palette size (9) for all vehicles"
+              >
+                <i class="fas fa-expand-arrows-alt"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+        <section id="colors-grid" class="colors-grid"></section>
+        <div class="action-toolbar">
+          <button class="reset-all-btn" title="Revert all changes for this car">
+            <i class="fas fa-undo"></i> Reset
+          </button>
+          <button
+            id="random-all-btn"
+            disabled="disabled"
+            title="Smart Randomize All Slots"
+          >
+            <i class="fas fa-dice"></i> Random
+          </button>
+          <button
+            id="copy-vehicle-btn"
+            disabled="disabled"
+            title="Copy all palettes from this car"
+          >
+            <i class="fas fa-copy"></i> Copy
+          </button>
+          <button
+            id="paste-vehicle-btn"
+            disabled="disabled"
+            title="Paste palettes to this car"
+          >
+            <i class="fas fa-paste"></i> Paste
+          </button>
+          <button
+            id="save-btn"
+            disabled="disabled"
+            title="Download the updated file"
+          >
+            <i class="fas fa-save"></i> Save
+          </button>
+        </div>
+      </main>
+      <div class="backdrop"></div>
+      <section class="guide-popup custom-scrollbar">
+        <button class="close-btn" aria-label="Close usage guide">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3
+          style="
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+          "
+        >
+          Usage Guide & Documentation
+        </h3>
+
+        <div style="margin-bottom: 1.8rem">
+          <h4 style="color: var(--primary); margin-bottom: 0.8rem">
+            1. Getting Started & Offline Support
+          </h4>
+          <ul style="list-style: none; padding-left: 0.5rem; font-size: 0.9rem">
+            <li style="margin-bottom: 0.6rem">
+              <strong>• File Upload:</strong> Click the "Upload File" area or
+              drag your <code>VehicleColors.params</code> file directly into the
+              tool.
+            </li>
+            <li style="margin-bottom: 0.6rem">
+              <strong>• Fully Offline:</strong> This tool is now 100%
+              offline-ready. All resources (fonts, icons, styles) are loaded
+              locally from the <code>resources/</code> folder.
+            </li>
+            <li style="margin-bottom: 0.6rem">
+              <strong>• Vehicle Selection:</strong> Once uploaded, use the main
+              dropdown to select a car. Use the <strong>Vehicle List</strong>
+              <i class="fas fa-car"></i> icon for a searchable directory.
+            </li>
+            <li
+              style="
+                margin-top: 0.8rem;
+                padding: 0.5rem;
+                background: rgba(245, 158, 11, 0.1);
+                border-radius: 4px;
+                border-left: 3px solid #f59e0b;
+              "
+            >
+              <strong style="color: #f59e0b"
+                >[Important] SSDC Fixed File:</strong
+              >
+              The <code>fixed-vehiclecolors_for-ssdc/</code> folder contains a
+              corrected <code>VehicleColors.params</code>. This fix prevents a
+              known bug where DLC vehicle palettes could interfere with each
+              other. <strong>If this is your first time using the tool</strong>,
+              replace your game file with this one before loading it to make
+              changes.
+            </li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 1.8rem">
+          <h4 style="color: var(--primary); margin-bottom: 0.8rem">
+            2. Understanding the Color Layers
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.8rem">
+            Each color slot consists of three technical layers used by the
+            game's engine:
+          </p>
+          <ul style="list-style: none; padding-left: 0.5rem; font-size: 0.9rem">
+            <li style="margin-bottom: 0.4rem">
+              <strong>— Paint:</strong> Acts as the base shading and tint layer.
+            </li>
+            <li style="margin-bottom: 0.4rem">
+              <strong>— Lacquer:</strong> The primary visible body paint. This
+              is your main color.
+            </li>
+            <li style="margin-bottom: 0.4rem">
+              <strong>— Flake:</strong> A glossy, metallic layer that creates
+              reflections and shine highlights.
+            </li>
+          </ul>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: var(--text-muted);
+              margin-top: 0.5rem;
+              font-style: italic;
+            "
+          >
+            Note: For a "flat" solid look, match the hex/RGB values across all
+            three layers.
+          </p>
+          <div
+            style="
+              margin-top: 0.8rem;
+              padding: 0.6rem;
+              background: rgba(var(--primary-rgb), 0.1);
+              border-left: 3px solid var(--primary);
+              border-radius: 4px;
+            "
+          >
+            <strong style="font-size: 0.85rem; color: var(--primary)"
+              >In-Game Swatch Logic:</strong
+            >
+            <p
+              style="
+                font-size: 0.8rem;
+                line-height: 1.4;
+                margin-top: 0.2rem;
+                color: var(--text-main);
+              "
+            >
+              The game uses the <strong>'Swatch type'</strong> parameter
+              (usually set to Paint) to display the color preview in menus.
+              Whatever color value is assigned to that specific layer will be
+              shown as the small square preview in the vehicle selection screen.
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.8rem">
+          <h4 style="color: #f59e0b; margin-bottom: 0.8rem">3. New Features</h4>
+          <ul style="list-style: none; padding-left: 0.5rem; font-size: 0.9rem">
+            <li style="margin-bottom: 0.8rem">
+              <strong style="color: #f59e0b">★ Color Library:</strong> Found a
+              perfect combo? Click <strong>"+ Library"</strong> on any slot to
+              save it. Open the Library <i class="fas fa-palette"></i> menu to
+              apply your saved presets to any vehicle.
+            </li>
+            <li style="margin-bottom: 0.8rem">
+              <strong style="color: #f59e0b">★ Full Vehicle Copy/Paste:</strong>
+              Use the <strong>Copy</strong> and <strong>Paste</strong> buttons
+              in the bottom toolbar to transfer all color slots from one vehicle
+              to another in a single click.
+            </li>
+            <li style="margin-bottom: 0.8rem">
+              <strong style="color: #f59e0b">★ Sync Logic (DLC):</strong> When
+              editing DLC vehicles, the <strong>Sync</strong>
+              <i class="fas fa-sync-alt"></i> feature ensures that hidden
+              "Placeholder" models are updated simultaneously to prevent in-game
+              rendering bugs.
+            </li>
+            <li style="margin-bottom: 0.8rem">
+              <strong style="color: #f59e0b">★ Smart Randomizer:</strong> Click
+              the <i class="fas fa-dice"></i> icon to generate harmonious color
+              schemes based on color theory (Complementary, Analogous, etc.) to
+              ensure a professional look.
+            </li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 1.8rem">
+          <h4 style="color: var(--primary); margin-bottom: 0.8rem">
+            4. Layout & Management
+          </h4>
+          <ul style="list-style: none; padding-left: 0.5rem; font-size: 0.9rem">
+            <li style="margin-bottom: 0.6rem">
+              <strong>• Palette Size:</strong> Change the number of available
+              color slots (1-9) per vehicle.
+            </li>
+            <li style="margin-bottom: 0.6rem">
+              <strong>• Batch Max Size:</strong> Click
+              <i class="fas fa-expand-arrows-alt"></i> to unlock all 9 slots for
+              every vehicle in the file at once.
+            </li>
+            <li style="margin-bottom: 0.6rem">
+              <strong>• Drag & Drop:</strong> Use the
+              <i class="fas fa-grip-vertical"></i> handle on any slot to reorder
+              your colors.
+            </li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 1rem">
+          <h4 style="color: var(--success); margin-bottom: 0.8rem">
+            5. Finalizing Your Changes
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.5">
+            Click <strong>Save</strong> in the bottom toolbar. The tool will
+            generate a perfectly formatted
+            <code>VehicleColors.params</code> file. Replace the original file in
+            your game's directory to see your new designs in action.
+          </p>
+        </div>
+      </section>
+      <section class="vehicles-popup custom-scrollbar">
+        <button class="close-btn" aria-label="Close vehicle list">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3>Vehicle List</h3>
+        <input
+          type="text"
+          id="vehicle-search"
+          placeholder="Search vehicles..."
+          aria-label="Search vehicles"
+        />
+        <div id="vehicle-list">
+          <h4>Main Game Vehicles</h4>
+          <ul>
+            <li>Musclecar_01<strong>RYBACK BRAWLER</strong></li>
+            <li>Musclecar_02<strong>COBRETTI NERO GT400</strong></li>
+            <li>Musclecar_03<strong>COBRETTI IRIDIUM</strong></li>
+            <li>Musclecar_04<strong>RYBACK MOHAWK</strong></li>
+            <li>Musclecar_05<strong>COBRETTI GT500</strong></li>
+            <li>Musclecar_06<strong>COBRETTI PURSUIT</strong></li>
+            <li>Musclecar_07<strong>RYBACK COYOTE</strong></li>
+            <li>Musclecar_08<strong>HANZO GT</strong></li>
+            <li>Musclecar_09<strong>RYBACK FIRESTORM</strong></li>
+            <li>Musclecar_10<strong>COBRETTI CASCADE</strong></li>
+            <li>Musclecar_11<strong>COBRETTI IRIDIUM BBX</strong></li>
+            <li>Musclecar_12<strong>RYBACK BRAWLER GSX</strong></li>
+            <li>Musclecar_13<strong>RYBACK MOHAWK XDX</strong></li>
+            <li>Musclecar_14<strong>RYBACK COYOTE AMX</strong></li>
+            <li>Musclecar_15<strong>RYBACK MOHAWK FSX</strong></li>
+            <li>Musclecar_16<strong>RYBACK MOHAWK XL</strong></li>
+            <li>Musclecar_Drone<em>Only visible via Game Modding</em></li>
+            <li>Musclecar_Ghost<em>Only visible via Game Modding</em></li>
+            <li>NemesisTruck01<em>Only visible via Game Modding</em></li>
+            <li>NemTruck1Trai1<em>Only visible via Game Modding</em></li>
+            <li>NemTruck1Trai2<em>Only visible via Game Modding</em></li>
+            <li>Supercar_01<strong>RYBACK CYCLONE RS</strong></li>
+            <li>Supercar_02<strong>COBRETTI VORTEX</strong></li>
+            <li>Supercar_03<strong>HANZO INDUS V8R</strong></li>
+            <li>Supercar_04<strong>COBRETTI 455 GT</strong></li>
+            <li>Supercar_05<strong>COBRETTI 530 GTS</strong></li>
+            <li>Supercar_06<strong>COBRETTI GT RS</strong></li>
+            <li>Supercar_07<strong>COBRETTI SLIPSTREAM</strong></li>
+            <li>Supercar_08<strong>HANZO FX350</strong></li>
+            <li>Supercar_09<strong>HANZO BAYONET R</strong></li>
+            <li>Supercar_10<strong>COBRETTI 455 GT BBX</strong></li>
+            <li>Supercar_11<strong>COBRETTI SLIPSTREAM FSX</strong></li>
+            <li>Supercar_12<strong>COBRETTI VORTEX GX</strong></li>
+            <li>Supercar_13<strong>HANZO INDUS GSX</strong></li>
+            <li>Supercar_14<strong>HANZO BAYONET MX</strong></li>
+            <li>Supercar_15<strong>HANZO FX350 CX</strong></li>
+            <li>Supercar_16<strong>COBRETTI SLIPSTREAM XL</strong></li>
+            <li>Truck_01<strong>RYBACK TITAN</strong></li>
+            <li>Truck_02<strong>RYBACK THUNDER</strong></li>
+            <li>Truck_03<strong>RYBACK TORNADO</strong></li>
+            <li>Truck_04<strong>RYBACK BANDIT</strong></li>
+            <li>Truck_05<strong>RYBACK TORNADO BBX</strong></li>
+            <li>Truck_06<strong>RYBACK TITAN WMX</strong></li>
+            <li>Truck_07<strong>RYBACK BANDIT FSX</strong></li>
+            <li>Truck_08<strong>RYBACK BANDIT XL</strong></li>
+            <li>Truck_Demolition<em>Only visible via Game Modding</em></li>
+            <li>Unique_01<strong>ELITE 440 SPECIAL</strong></li>
+            <li>Unique_02<strong>ELITE S510</strong></li>
+            <li>Unique_03<strong>ELITE GOLIATH</strong></li>
+            <li>Unique_04<strong>ELITE GT12</strong></li>
+          </ul>
+          <h4>DLC Vehicles</h4>
+          <ul>
+            <li>
+              Musclecar_17<strong>COBRETTI CENTAUR</strong
+              ><em>Model ID: <strong>Placeholder_09</strong></em>
+            </li>
+            <li>
+              Musclecar_18<strong>RYBACK JAVELIN</strong
+              ><em>Model ID: <strong>Placeholder_10</strong></em>
+            </li>
+            <li>
+              Musclecar_19<strong>RYBACK COYOTE SPECIAL</strong
+              ><em>Model ID: <strong>Placeholder_08</strong></em>
+            </li>
+            <li>
+              Truck_09<strong>HANZO KANOBO</strong
+              ><em>Model ID: <strong>Placeholder_11</strong></em>
+            </li>
+            <li>
+              Unique_23<strong>ELITE S510 VX</strong
+              ><em>Model ID: <strong>Placeholder_07</strong></em>
+            </li>
+            <li>
+              Unique_22<strong>ELITE S510 RP</strong
+              ><em>Model ID: <strong>Placeholder_06</strong></em>
+            </li>
+            <li>
+              Unique_21<strong>ELITE 440 BRN</strong
+              ><em>Model ID: <strong>Placeholder_05</strong></em>
+            </li>
+            <li>
+              Supercar_20<strong>HANZO KATANA</strong
+              ><em>Model ID: <strong>Placeholder_04</strong></em>
+            </li>
+            <li>
+              Supercar_19<strong>RYBACK VULCAN</strong
+              ><em>Model ID: <strong>Placeholder_03</strong></em>
+            </li>
+            <li>
+              Supercar_18<strong>COBRETTI SEVERUS</strong
+              ><em>Model ID: <strong>Placeholder_02</strong></em>
+            </li>
+            <li>
+              Supercar_17<strong>RYBACK CYCLONE SPECIAL</strong
+              ><em>Model ID: <strong>Placeholder_01</strong></em>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section class="library-popup custom-scrollbar">
+        <button class="close-btn" aria-label="Close color library">
+          <i class="fas fa-times"></i>
+        </button>
+        <h3>Color Library</h3>
+        <p
+          style="
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+          "
+        >
+          Save your favorite color palettes here to reuse them on other
+          vehicles.
+        </p>
+        <div id="library-list" class="library-list">
+          <div class="empty-library">
+            Your library is empty. Save a palette from a vehicle slot!
+          </div>
+        </div>
+        <div style="margin-top: 1rem; text-align: right">
+          <button
+            id="clear-library-btn"
+            class="library-item-btn"
+            style="
+              background: var(--error);
+              color: white;
+              width: auto;
+              padding: 0.5rem 1rem;
+            "
+          >
+            <i class="fas fa-trash"></i> Clear All Presets
+          </button>
+        </div>
+      </section>
+
+      <section class="update-popup">
+        <button
+          class="close-btn"
+          id="updatePopupClose"
+          aria-label="Close update notification"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="update-icon">
+          <i class="fas fa-download"></i>
+        </div>
+        <h3>Update Available!</h3>
+        <p class="update-version">Version <span id="updateVersion"></span></p>
+        <p class="update-changes" id="updateChanges"></p>
+        <div class="update-buttons">
+          <button class="update-btn-secondary" id="updateLaterBtn">
+            Later
+          </button>
+          <button class="update-btn-primary" id="updateDownloadBtn">
+            <i class="fas fa-download"></i> Download Now
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <script src="resources/js/vct-script.js"></script>
+  </body>
+</html>
